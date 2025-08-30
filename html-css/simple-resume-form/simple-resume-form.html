@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Resume Form</title>
+        <style>
+            .center {
+                text-align: center;
+            }
+        </style>
+	</head>
+    <body style="background-image: url('resume-bg.png');">
+	    <h1 class="center">RESUME FORM</h1>
+
+        <fieldset>
+            <legend style="text-align:center;font-size:150%;"><b>Personal Information</b></legend>
+            <label for="lname">Last Name:</label>
+                <input type="text" id="lname" name="lname"><br>
+            <label for="fname">First Name:</label>
+                <input type="text" id="fname" name="fname"><br>
+            <label for="mname">Middle Name:</label>
+                <input type="text" id="mname" name="mname"><br>
+            <label for="gender">Gender:</label>
+                <input type="radio" id="male" name="gender" value="Male">
+                    <label for="male">Male</label>
+                <input type="radio" id="female" name="gender" value="Female">
+                    <label for="female">Female</label><br>
+            <label for="age">Age:</label>
+                <input type="number" id="age" name="age" min="1" max="200"><br>
+            <label for="birthday">Birthday:</label>
+                <input type="date" id="birthday" name="birthday"><br>
+            <label for="bplace">Birthplace:</label>
+                <input type="text" id="bplace" name="bplace"><br>
+            <label for="email">Email:</label>
+                <input type="email" id="email" name="email"><br>
+            <label for="number">Contact Number:</label>
+                <input type="tel" id="number" name="number">
+        </fieldset>
+	
+        <fieldset>
+            <legend style="text-align:center;font-size:150%;"><b>Educational Background</b></legend>
+            <p>Elementary</p>
+            <label for="sch">School:</label>
+                <input type="text" id="sch" name="sch"><br>
+                <label for="eyg">Year Graduated:</label>
+                <input type="number" id="eyg" name="eyg" min="1800" max="2099" step="1" value="2000"/><br><br>
+            <p>Junior Highschool</p>
+            <label for="sch1">School:</label>
+                <input type="text" id="sch1" name="sch1"><br>
+                <label for="jyg">Year Graduated:</label>
+                <input type="number" id="jyg" name="jyg" min="1800" max="2099" step="1" value="2000"/><br><br>
+            <p>Senior Highschool</p>
+            <label for="sch2">School:</label>
+                <input type="text" id="sch2" name="sch2"><br>
+                <label for="syg">Year Graduated:</label>
+                <input type="number" id="syg" name="syg" min="1800" max="2099" step="1" value="2000"/><br><br>
+            <p>College</p>
+            <label for="sch3">School:</label>
+                <input type="text" id="sch3" name="sch3"><br>
+                <label for="course">Course:</label>
+                <input type="text" id="course" name="course"><br>
+                <label for="cyg">Year Graduated:</label>
+                <input type="number" id="cyg" name="cyg" min="1800" max="2099" step="1" value="2000"/>
+        </fieldset>
+	
+        <fieldset>
+            <legend style="text-align:center;font-size:150%;"><b>Work Experience</b></legend>
+            <label for="com">Company:</label>
+                <input type="text" id="com" name="com"><br>
+                <label for="pos">Position:</label>
+                <input type="text" id="pos" name="pos"><br>
+                <label for="from">From:</label>
+                <input type="number" id="from" name="from" min="1800" max="2099" step="1" value="2000"/>
+                <label for="to">To:</label>
+                <input type="number" id="to" name="to" min="1800" max="2099" step="1" value="2000"/><br><br>
+            <label for="com1">Company:</label>
+                <input type="text" id="com1" name="com1"><br>
+                <label for="pos1">Position:</label>
+                <input type="text" id="pos1" name="pos1"><br>
+                <label for="from1">From:</label>
+                <input type="number" id="from1" name="from1" min="1800" max="2099" step="1" value="2000"/>
+                <label for="to1">To:</label>
+                <input type="number" id="to1" name="to1" min="1800" max="2099" step="1" value="2000"/><br><br>
+            <label for="com2">Company:</label>
+                <input type="text" id="com2" name="com2"><br>
+                <label for="pos2">Position:</label>
+                <input type="text" id="pos2" name="pos2"><br>
+                <label for="from2">From:</label>
+                <input type="number" id="from2" name="from2" min="1800" max="2099" step="1" value="2000"/>
+                <label for="to12">To:</label>
+                <input type="number" id="to12" name="to12" min="1800" max="2099" step="1" value="2000"/><br><br>
+        </fieldset>
+	
+        <fieldset>
+            <legend style="text-align:center;font-size:150%;"><b>Skills/Trainings</b></legend>
+            <div class="center">
+                <label for="skills">Skills:</label><br>
+                    <input list="skills" name="skills">
+                    <datalist id="skills">
+                        <option value="Computer skills">
+                        <option value="Active listening">
+                        <option value="Communication">
+                        <option value="Customer service">
+                        <option value="Interpersonal skills">
+                        <option value="Leadership">
+                        <option value="Management skills">
+                        <option value="Problem-solving">
+                        <option value="Time management">
+                        <option value="Transferable skills">
+                    </datalist>
+                    <input list="skills" name="skills">
+                    <datalist id="skills">
+                        <option value="Computer skills">
+                        <option value="Active listening">
+                        <option value="Communication">
+                        <option value="Customer service">
+                        <option value="Interpersonal skills">
+                        <option value="Leadership">
+                        <option value="Management skills">
+                        <option value="Problem-solving">
+                        <option value="Time management">
+                        <option value="Transferable skills">
+                    </datalist>
+                    <input list="skills" name="skills">
+                    <datalist id="skills">
+                        <option value="Computer skills">
+                        <option value="Active listening">
+                        <option value="Communication">
+                        <option value="Customer service">
+                        <option value="Interpersonal skills">
+                        <option value="Leadership">
+                        <option value="Management skills">
+                        <option value="Problem-solving">
+                        <option value="Time management">
+                        <option value="Transferable skills">
+                    </datalist>
+                    <input list="skills" name="skills">
+                    <datalist id="skills">
+                        <option value="Computer skills">
+                        <option value="Active listening">
+                        <option value="Communication">
+                        <option value="Customer service">
+                        <option value="Interpersonal skills">
+                        <option value="Leadership">
+                        <option value="Management skills">
+                        <option value="Problem-solving">
+                        <option value="Time management">
+                        <option value="Transferable skills">
+                    </datalist>
+                    <input list="skills" name="skills">
+                    <datalist id="skills">
+                        <option value="Computer skills">
+                        <option value="Active listening">
+                        <option value="Communication">
+                        <option value="Customer service">
+                        <option value="Interpersonal skills">
+                        <option value="Leadership">
+                        <option value="Management skills">
+                        <option value="Problem-solving">
+                        <option value="Time management">
+                        <option value="Transferable skills">
+                    </datalist>
+                    <input list="skills" name="skills">
+                    <datalist id="skills">
+                        <option value="Computer skills">
+                        <option value="Active listening">
+                        <option value="Communication">
+                        <option value="Customer service">
+                        <option value="Interpersonal skills">
+                        <option value="Leadership">
+                        <option value="Management skills">
+                        <option value="Problem-solving">
+                        <option value="Time management">
+                        <option value="Transferable skills">
+                    </datalist>
+                    <br><br><label for="skills">Tranings:</label><br>
+                    <textarea name="message" rows="10" cols="50"></textarea>
+                </div>
+        </fieldset> 
+	
+        <fieldset>
+            <legend style="text-align:center;font-size:150%;"><b>Character Reference</b></legend>
+            <label for="name">Name:</label>
+                <input type="text" id="name" name="name"><br>
+                <label for="com3">Company:</label>
+                <input type="text" id="com3" name="com3"><br>
+                <label for="pos3">Position:</label>
+                <input type="text" id="pos3" name="pos3"><br>
+                <label for="number1">Contact Number:</label>
+                <input type="tel" id="number1" name="number1"><br><br>
+            <label for="name1">Name:</label>
+                <input type="text" id="name1" name="name1"><br>
+                <label for="com4">Company:</label>
+                <input type="text" id="com4" name="com4"><br>
+                <label for="pos4">Position:</label>
+                <input type="text" id="pos4" name="pos4"><br>
+                <label for="number2">Contact Number:</label>
+                <input type="tel" id="number2" name="number2">
+        </fieldset>
+	
+        <div class="center">
+            <button type="button" 
+                onclick="alert('Resume Form Submitted')" 
+                style="font-size:20px;
+                    margin-top: 10px;
+                    padding: 14px 40px;">
+                Submit
+            </button>
+        </div>
+    </body>
+</html>
+
