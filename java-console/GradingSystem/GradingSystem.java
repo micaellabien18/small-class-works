@@ -133,16 +133,15 @@ public class GradingSystem {
 
     // Helper to get point equivalent
     private static String getPointEquivalent(double grade) {
-    if (grade >= 96) return "1.00";
-    else if (grade >= 93) return "1.25";
-    else if (grade >= 91) return "1.50";
-    else if (grade >= 88) return "1.75";
-    else if (grade >= 86) return "2.00";
-    else if (grade >= 84) return "2.25";
-    else if (grade >= 80) return "2.50";
-    else if (grade >= 78) return "2.75";
-    else if (grade >= 74) return "3.00";
-    else return "5.00";
-}
-
+        if (grade >= 96) return "1.00";
+        else if (grade >= 93) return "1.25";
+        else if (grade >= 91) return "1.50";
+        else if (grade >= 88) return "1.75";
+        else if (grade >= 86) return "2.00";
+        else if (grade >= 84) return "2.25";
+        else if (grade >= 80) return "2.50";
+        else if (grade >= 78) return "2.75";
+        else if (grade >= 74) return "3.00";
+        else return "5.00";
+    }
 }
