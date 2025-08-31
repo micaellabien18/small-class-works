@@ -1,288 +1,148 @@
-import java.io.*;
+import java.util.Scanner;
+
+// Class representing a student
+class Student {
+    private String firstName, lastName, section;
+
+    public Student(String firstName, String lastName, String section) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.section = section;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
+    public String getSection() {
+        return section;
+    }
+}
+
+// Class representing the grade computation (Prelim, Midterm, Final, Semestral)
+class GradeCalculator {
+    private double classStanding, finalGrade;
+
+    public GradeCalculator(int attendance, int quiz, int recitation, int project, int exam) {
+        this.classStanding = (attendance + quiz + recitation + project) / 4.0;
+        this.finalGrade = (classStanding + exam) / 2.0;
+    }
+
+    public double getFinalGrade() {
+        return finalGrade;
+    }
+
+    public String getPointEquivalent() {
+        if (finalGrade >= 96) return "1.00";
+        else if (finalGrade >= 93) return "1.25";
+        else if (finalGrade >= 91) return "1.50";
+        else if (finalGrade >= 88) return "1.75";
+        else if (finalGrade >= 86) return "2.00";
+        else if (finalGrade >= 84) return "2.25";
+        else if (finalGrade >= 80) return "2.50";
+        else if (finalGrade >= 78) return "2.75";
+        else if (finalGrade >= 74) return "3.00";
+        else return "5.00";
+    }
+
+    public String getRemarks() {
+        return finalGrade >= 75 ? "Passed" : "Failed";
+    }
+}
 
 public class GradingSystem {
-    public static void main(String[] args) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        
-        String x, lastName, firstName, section;
-        int attendance, quiz, recitation, project, prelimExam, midtermExam, finalExam;
-        double classStanding, prelimGrade, midtermGrade, finalGrade, semGrade;
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
         char ans;
-        
-       do {
+
+        do {
             System.out.println("************** Grading System ***************");
 
-            System.out.print("Enter Last Name       : ");
-            lastName = reader.readLine();
+            System.out.print("Enter Last Name: ");
+            String lastName = sc.nextLine();
 
-            System.out.print("Enter First Name      : ");
-            firstName = reader.readLine();
+            System.out.print("Enter First Name: ");
+            String firstName = sc.nextLine();
 
-            System.out.print("Enter Section         : ");
-            section = reader.readLine();
+            System.out.print("Enter Section: ");
+            String section = sc.nextLine();
 
-            System.out.println("\n*********** Preliminary Grades ***********");
+            Student student = new Student(firstName, lastName, section);
 
-            System.out.print("Input Attendance      :  ");
-            x = reader.readLine();
-            attendance = Integer.parseInt(x);
+            System.out.println("\n********* Preliminary Grades *********");
+            GradeCalculator prelim = inputGrades(sc, "Prelim");
 
-            System.out.print("Input Quiz            :  ");
-            x = reader.readLine();
-            quiz = Integer.parseInt(x);
+            System.out.println("\n*********** Midterm Grades ***********");
+            GradeCalculator midterm = inputGrades(sc, "Midterm");
 
-            System.out.print("Input Recitation      :  ");
-            x = reader.readLine();
-            recitation = Integer.parseInt(x);
+            System.out.println("\n************ Final Grades ************");
+            GradeCalculator finals = inputGrades(sc, "Final");
 
-            System.out.print("Input Project         :  ");
-            x = reader.readLine();
-            project = Integer.parseInt(x);
-            
-            
-            classStanding=(attendance + quiz + recitation + project)/4;
-            System.out.println("Classtanding		: "+ classStanding);  
-            
-            System.out.print("Input Prelim Exam(Score): ");
-            x = reader.readLine();
-            prelimExam = Integer.parseInt(x);
-            
-            prelimGrade= (classStanding+prelimExam)/2;
-            System.out.println("Prelim Grade            : "+prelimGrade);
-            
-            if (prelimGrade >= 96 && prelimGrade <= 100) {
-                System.out.println("Point			: 1.0");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (prelimGrade >= 93 && prelimGrade <= 95.5) {
-                System.out.println("Point			: 1.25");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (prelimGrade >= 91 && prelimGrade <= 92.5) {
-                System.out.println("Point			: 1.5");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (prelimGrade>= 88 && prelimGrade <= 90.5) {
-                System.out.println("Point 			: 1.75");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (prelimGrade >= 86 && prelimGrade <= 87.5) {
-                System.out.println("Point 			: 2.00");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (prelimGrade >= 84 && prelimGrade <= 85.5) {
-                System.out.println("Point 			: 2.25");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (prelimGrade>= 80 && prelimGrade <= 83.5) {
-                System.out.println("Point 			: 2.5");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (prelimGrade >= 78 && prelimGrade <= 79.5) {
-                System.out.println("Point 			: 2.75");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (prelimGrade >= 74 && prelimGrade <= 77.5) {
-                System.out.println("Point 			: 3.00");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (prelimGrade >= 70 && prelimGrade <= 73.5) {
-                System.out.println("Point 			: 5.00");
-                System.out.println("Remarks			: Failed");
-            }
-            
-            System.out.println("\n*****Midterm Grades*******");
+            double semestralGrade = (prelim.getFinalGrade() + midterm.getFinalGrade() + finals.getFinalGrade()) / 3.0;
 
-            System.out.print("Input Attendance      :  ");
-            x = reader.readLine();
-            attendance = Integer.parseInt(x);
-            
-            System.out.print("Input Quiz            :  ");
-            x = reader.readLine();
-            quiz = Integer.parseInt(x);
+            System.out.println("\n************** STUDENT REPORT **************");
+            System.out.println("Name: " + student.getFullName());
+            System.out.println("Section: " + student.getSection());
 
-            System.out.print("Input Recitation      :  ");
-            x = reader.readLine();
-            recitation = Integer.parseInt(x);
+            printGrade("Prelim", prelim);
+            printGrade("Midterm", midterm);
+            printGrade("Final", finals);
 
-            System.out.print("Input Project         :  ");
-            x = reader.readLine();
-            project = Integer.parseInt(x);
-            
-            
-            classStanding=(attendance + quiz + recitation + project)/4;
-            System.out.println("Classtanding	 	 : "+ classStanding);  
-            
-            System.out.print("Input Midterm Exam(Score): ");
-            x = reader.readLine();
-            midtermExam = Integer.parseInt(x);
-            
-            midtermGrade= (classStanding+midtermExam)/2;
-            System.out.println("Midterm Grade            : "+midtermGrade);
-            
-            if (midtermGrade >= 96 && midtermGrade <= 100) {
-                System.out.println("Point			 : 1.0");
-                System.out.println("Remarks			 : Passed");
-                
-            } else if (midtermGrade >= 93 && midtermGrade <= 95.5) {
-                System.out.println("Point			 : 1.25");
-                System.out.println("Remarks			 : Passed");
-                
-            } else if (midtermGrade >= 91 && midtermGrade <= 92.5) {
-                System.out.println("Point			 : 1.5");
-                System.out.println("Remarks			 : Passed");
-                
-            } else if (midtermGrade>= 88 && midtermGrade <= 90.5) {
-                System.out.println("Point 			 : 1.75");
-                System.out.println("Remarks			 : Passed");
-                
-            } else if (midtermGrade >= 86 && midtermGrade <= 87.5) {
-                System.out.println("Point 			 : 2.00");
-                System.out.println("Remarks			 : Passed");
-                
-            } else if (midtermGrade >= 84 && midtermGrade <= 85.5) {
-                System.out.println("Point 			 : 2.25");
-                System.out.println("Remarks			 : Passed");
-                
-            } else if (midtermGrade>= 80 && midtermGrade <= 83.5) {
-                System.out.println("Point 			 : 2.5");
-                System.out.println("Remarks			 : Passed");
-                
-            } else if (midtermGrade >= 78 && midtermGrade <= 79.5) {
-                System.out.println("Point 			 : 2.75");
-                System.out.println("Remarks			 : Passed");
-                
-            } else if (midtermGrade >= 74 && midtermGrade <= 77.5) {
-                System.out.println("Point 			 : 3.00");
-                System.out.println("Remarks			 : Passed");
-                
-            } else if (midtermGrade >= 70 && midtermGrade <= 73.5) {
-                System.out.println("Point 			 : 5.00");
-                System.out.println("Remarks			 : Failed");
-            }
+            System.out.printf("\nSemestral Grade: %.2f\n", semestralGrade);
+            System.out.println("Point: " + getPointEquivalent(semestralGrade));
+            System.out.println("Remarks: " + (semestralGrade >= 75 ? "Passed" : "Failed"));
 
-            
-            System.out.println("\n*********** Final Grade ***********");
-            
-        System.out.print("Input Attendance      :  ");
-            x = reader.readLine();
-            attendance = Integer.parseInt(x);
+            System.out.println("********************************************");
 
-            System.out.print("Input Quiz            :  ");
-            x = reader.readLine();
-            quiz = Integer.parseInt(x);
+            System.out.print("\nDo you want to enter another student? [y/n]: ");
+            ans = sc.next().charAt(0);
+            sc.nextLine();
 
-            System.out.print("Input Recitation      :  ");
-            x = reader.readLine();
-            recitation = Integer.parseInt(x);
+        } while (ans == 'y' || ans == 'Y');
 
-            System.out.print("Input Project         :  ");
-            x = reader.readLine();
-            project = Integer.parseInt(x);
-            
-            
-            classStanding=(attendance + quiz + recitation + project)/4;
-            System.out.println("Classtanding		: "+ classStanding);  
-            
-            System.out.print("Input Final Exam(Score) : ");
-            x = reader.readLine();
-            finalExam = Integer.parseInt(x);
-            
-            finalGrade= (classStanding+finalExam)/2;
-            System.out.println("Final Grade             : "+finalGrade);
-            
-            if (finalGrade >= 96 && finalGrade <= 100) {
-                System.out.println("Point			: 1.0");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (finalGrade >= 93 && finalGrade <= 95.5) {
-                System.out.println("Point			: 1.25");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (finalGrade >= 91 && finalGrade <= 92.5) {
-                System.out.println("Point			: 1.5");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (finalGrade>= 88 && finalGrade <= 90.5) {
-                System.out.println("Point 			: 1.75");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (finalGrade >= 86 && finalGrade <= 87.5) {
-                System.out.println("Point 			: 2.00");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (finalGrade >= 84 && finalGrade <= 85.5) {
-                System.out.println("Point 			: 2.25");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (finalGrade>= 80 && finalGrade <= 83.5) {
-                System.out.println("Point 			: 2.5");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (finalGrade >= 78 && finalGrade <= 79.5) {
-                System.out.println("Point 			: 2.75");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (finalGrade >= 74 && finalGrade <= 77.5) {
-                System.out.println("Point 			: 3.00");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (finalGrade >= 70 && finalGrade <= 73.5) {
-                System.out.println("Point 			: 5.00");
-                System.out.println("Remarks			: Failed");
-            }
-
-        System.out.println("\n*********** Semestral Grade ***********");
-
-        semGrade= (prelimGrade+midtermGrade+finalGrade)/3;
-            System.out.println("Semestral Grade		: "+semGrade);
-
-        if (semGrade >= 96 && semGrade <= 100) {
-                System.out.println("Point			: 1.0");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (semGrade >= 93 && semGrade <= 95.5) {
-                System.out.println("Point			: 1.25");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (semGrade >= 91 && semGrade <= 92.5) {
-                System.out.println("Point			: 1.5");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (semGrade>= 88 && semGrade <= 90.5) {
-                System.out.println("Point 			: 1.75");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (semGrade >= 86 && semGrade <= 87.5) {
-                System.out.println("Point 			: 2.00");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (semGrade >= 84 && semGrade <= 85.5) {
-                System.out.println("Point 			: 2.25");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (semGrade>= 80 && semGrade <= 83.5) {
-                System.out.println("Point 			: 2.5");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (semGrade >= 78 && semGrade <= 79.5) {
-                System.out.println("Point 			: 2.75");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (semGrade >= 74 && semGrade <= 77.5) {
-                System.out.println("Point 			: 3.00");
-                System.out.println("Remarks			: Passed");
-                
-            } else if (semGrade >= 70 && semGrade <= 73.5) {
-                System.out.println("Point 			: 5.00");
-                System.out.println("Remarks			: Failed");
-            }
-            
-            System.out.println("Do you want to repeat again? [y/n]");
-            ans = (char)System.in.read();
-            System.in.read();
-        System.in.read();
-
-        } while (ans == 'Y' || ans == 'y');
+        sc.close();
     }
+
+    // Helper to input grades
+    private static GradeCalculator inputGrades(Scanner sc, String term) {
+        System.out.print("Input Attendance: ");
+        int attendance = sc.nextInt();
+
+        System.out.print("Input Quiz: ");
+        int quiz = sc.nextInt();
+
+        System.out.print("Input Recitation: ");
+        int recitation = sc.nextInt();
+
+        System.out.print("Input Project: ");
+        int project = sc.nextInt();
+
+        System.out.print("Input " + term + " Exam: ");
+        int exam = sc.nextInt();
+
+        sc.nextLine();
+        return new GradeCalculator(attendance, quiz, recitation, project, exam);
+    }
+
+    // Helper to print grades
+    private static void printGrade(String term, GradeCalculator grade) {
+        System.out.printf("\n%s Grade: %.2f%n", term, grade.getFinalGrade());
+        System.out.println("Point: " + grade.getPointEquivalent());
+        System.out.println("Remarks: " + grade.getRemarks());
+    }
+
+    // Helper to get point equivalent
+    private static String getPointEquivalent(double grade) {
+    if (grade >= 96) return "1.00";
+    else if (grade >= 93) return "1.25";
+    else if (grade >= 91) return "1.50";
+    else if (grade >= 88) return "1.75";
+    else if (grade >= 86) return "2.00";
+    else if (grade >= 84) return "2.25";
+    else if (grade >= 80) return "2.50";
+    else if (grade >= 78) return "2.75";
+    else if (grade >= 74) return "3.00";
+    else return "5.00";
+}
+
 }
