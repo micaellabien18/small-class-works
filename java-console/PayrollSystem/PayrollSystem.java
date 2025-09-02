@@ -1,571 +1,210 @@
-import java.io.*;
 import java.util.*;
+
+class Employee {
+    private String id, firstName, lastName, middleName, position, department, status;
+    private double monthlySalary, allowance, hourlyRate;
+
+    public Employee(String id, String firstName, String lastName, String middleName,
+                    String position, String department, String status,
+                    double monthlySalary, double allowance, double hourlyRate) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.middleName = middleName;
+        this.position = position;
+        this.department = department;
+        this.status = status;
+        this.monthlySalary = monthlySalary;
+        this.allowance = allowance;
+        this.hourlyRate = hourlyRate;
+    }
+
+    public String getId() { return id; }
+    public String getFullName() { return firstName + " " + middleName + " " + lastName; }
+    public String getPosition() { return position; }
+    public String getDepartment() { return department; }
+    public String getStatus() { return status; }
+    public double getMonthlySalary() { return monthlySalary; }
+    public double getAllowance() { return allowance; }
+    public double getHourlyRate() { return hourlyRate; }
+}
+
+class PayrollCalculator {
+    private static final double LATE_PER_HOUR = 150;
+    private static final double LATE_PER_MINUTE = 50;
+    private static final double ABSENCE_PER_DAY_HOURS = 8;
+    private static final int WORKING_HOURS = 192; // 24 days * 8 hours
+    private static final int UNDERTIME_HOURS = 4;
+    private static final double OVERTIME_RATE = 350;
+
+    public static double calculateOvertime(double hours) {
+        return hours * OVERTIME_RATE;
+    }
+
+    public static double[] calculateDeductions(double income, int bracket) {
+        double taxRate, sssRate, pagibigRate = 0.01, philhealthRate = 0.01;
+
+        switch (bracket) {
+            case 1 -> {
+                taxRate = 0.20; // Single
+                sssRate = 0.07;
+            }
+            case 2 -> {
+                taxRate = 0.10; // Married
+                sssRate = 0.03;
+            }
+            case 3 -> {
+                taxRate = 0.08; // Widow
+                sssRate = 0.02;
+            }
+            default -> {
+                taxRate = 0.20; // Single as default
+                sssRate = 0.07;
+            }
+        }
+
+        return new double[] {
+            income * taxRate,        // [0] = tax
+            income * sssRate,        // [1] = sss
+            income * pagibigRate,    // [2] = pagibig
+            income * philhealthRate, // [3] = philhealth
+        };
+    }
+
+    public static double calculateLatePenalty(double hours, double minutes) {
+        return (hours * LATE_PER_HOUR) + (minutes > 0 ? LATE_PER_MINUTE : 0);
+    }
+
+    public static double calculateGrossPay(Employee emp, double overtimeHours, double lateHours,
+                                            double lateMinutes, double absences, int undertime) {
+        double overTimePay = calculateOvertime(overtimeHours);
+        double latePenalty = calculateLatePenalty(lateHours, lateMinutes);
+        double absencePenalty = absences * ABSENCE_PER_DAY_HOURS;
+        double undertimePenalty = undertime * UNDERTIME_HOURS;
+
+        double totalHours = WORKING_HOURS - absencePenalty - undertimePenalty - lateHours;
+        double grossIncome = (totalHours * emp.getHourlyRate()) + emp.getAllowance() + overTimePay - latePenalty;
+        return grossIncome;
+    }
+}
+
 public class PayrollSystem {
-	public static void main(String[]args) throws IOException{
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
 
-String id1="1001",lname1="Rizal",fname1="Jose",mname1="A",position1="Manager",department="IT",sstatus="Single";
-double deductions,totalincome1,overtime1,overhrs1,hrspay=350,monthsal1=99840,allo1=4500,houseloan,carloan,totalloan,grosspay=0,
-       numworks=192,late,abse,absehrs=8,absetot,tothrs,rate1=520,totincome,minuteded=50,minute=1,minut=0,
-       hourded=150,hour,totalhrs,tax,SSS,PH,PGBG,netpay;
-int undertime,undertot,underhrs=4;
-char ans;
+        List<Employee> employees = Arrays.asList(
+            new Employee("1001", "Jose", "Cruz", "A", "Manager", "IT", "Single", 99840, 4500, 520),
+            new Employee("1002", "Paulo", "Santiago", "N", "Assistant Manager", "IT", "Single", 86400, 2500, 450),
+            new Employee("1003", "Anna", "Reyes", "L", "Secretary", "IT", "Married", 67200, 1500, 350),
+            new Employee("1004", "Lisa", "Mendoza", "P", "Assistant Secretary", "IT", "Widow", 57600, 1000, 300)
+        );
 
-String id2="1002",lname2="Bonifacio",fname2="Andres",mname2="C",position2="Assistant Manager";
-double totalincome2,overtime2,overhrs2,monthsal2=86400,allo2=2500,rate2=450;
+        // Display employee table
+        System.out.println("------------------------------------------------------------------------------------------");
+        System.out.println("                                    Payroll System 101                                    ");
+        System.out.println("------------------------------------------------------------------------------------------");
+        System.out.println("| ID   | Employee Name      | Position              | Dept | Rate | Salary   | Allowance |");
+        System.out.println("------------------------------------------------------------------------------------------");
+        for (Employee e : employees) {
+            System.out.printf("| %-4s | %-18s | %-21s | %-4s | %-4.0f | %-8.0f | %-9.0f |\n",
+                e.getId(),
+                e.getFullName(),
+                e.getPosition(),
+                e.getDepartment(),
+                e.getHourlyRate(),
+                e.getMonthlySalary(),
+                e.getAllowance()
+            );
+        }
+        System.out.println("---------------------------------------------------------------------------------------");
 
-String id3="1003",lname3="Santos",fname3="Sophia",mname3="S",position3="Secretary",mstatus="Married";
-double totalincome3,overtime3,overhrs3,monthsal3=67200,allo3=1500,rate3=350;
+        char ans;
+        do {
+            System.out.println("\nEnter Employee's Data");
+            System.out.print("\n  Enter Employee Number   : ");
+            String empId = sc.nextLine();
 
-String id4="1004",lname4="Alawi",fname4="Ivana",mname4="S",position4="Assistant Secretary",wstatus="Widow";
-double totalincome4,overtime4,overhrs4,monthsal4=57600,allo4=1000,rate4=300;
+            Employee emp = employees.stream()
+                                    .filter(e -> e.getId().equals(empId))
+                                    .findFirst()
+                                    .orElse(null);
 
-int sel, EmpNum;
+            if (emp == null) {
+                System.out.println("Invalid employee ID.");
+                System.out.println("\nDo you want to repeat again? [Y/N]: ");
+                ans = sc.nextLine().charAt(0);
+                continue;
+            }
 
-Scanner in=new Scanner(System.in);
+            System.out.println("    Employee Name         : " + emp.getFullName());
+            System.out.println("    Position              : " + emp.getPosition());
+            System.out.println("    Department            : " + emp.getDepartment());
+            System.out.println("    Status                : " + emp.getStatus());
+            System.out.println("    Monthly Salary        : " + emp.getMonthlySalary());
+            System.out.println("    Allowance             : " + emp.getAllowance());
+            System.out.println();
 
-do{
-System.out.println("-------------------------------------------------------");
-System.out.println("            TAGUIG CITY Payroll System 101");
-System.out.println("------------------------------------------------------");
-System.out.println("------------------------------------------------------");
-System.out.println("-----------------------------------------------------------------------------------------------------------------------");
-System.out.println("|          |                      |                 |            |        |         |            |       Official     |");
-System.out.println("| Employee |                      |                 |            |  Rate/ | Monthly |            |    Time = 8hours   |");
-System.out.println("|  Number  |    Employee Name     |    Position     | Department |  Hour  | Salary  | Allowances |                    |");
-System.out.println("|          |                      |                 |            |        |         |            | Overtime Exceeding |");
-System.out.println("|          |                      |                 |            |        |         |            |     1 hour=P350    |");
-System.out.println(" ---------------------------------------------------------------------------------------------------------------------");
-System.out.println("|   1001   |     Jose Rizal A     |     Manager     |     IT     |  520   | 99,840  |   4,500    |                    |");
-System.out.println("|   1002   |  Andres Bonifacio C  |  Asst. Manager  |     IT     |  450   | 86,400  |   2,500    |                    |");
-System.out.println("|   1003   |     Sophia Santos S      |    Secretary    |     IT     |  350   | 67,200  |   1,500    |                    |");
-System.out.println("|   1004   |    Ivana Alawi S     | Asst. Secretary |     IT     |  300   | 57,600  |   1,000    |                    |");
-System.out.println("-----------------------------------------------------------------------------------------------------------------------");
+            System.out.print("  Enter Overtime Hours    : ");
+            double overtimeHours = sc.nextDouble();
+            System.out.print("  Enter Late Hours        : ");
+            double lateHours = sc.nextDouble();
+            System.out.print("  Enter Late Minutes      : ");
+            double lateMinutes = sc.nextDouble();
+            System.out.print("  Enter Absences (Days)   : ");
+            double absences = sc.nextDouble();
+            System.out.print("  Enter Undertime (Hours) : ");
+            int undertime = sc.nextInt();
+            System.out.print("  Specify Tax Bracket\n    [1] Single\n    [2] Married\n    [3] Widow             : ");
+            int bracket = sc.nextInt();
+            System.out.print("  House Loan              : ");
+            double houseLoan = sc.nextDouble();
+            System.out.print("  Car Loan                : ");
+            double carLoan = sc.nextDouble();
+            sc.nextLine();
 
-System.out.println("\nEnter Employee's Data\n");
+            double totalLoan = houseLoan + carLoan;
+            double overtimePay = PayrollCalculator.calculateOvertime(overtimeHours);
+            double grossPay = PayrollCalculator.calculateGrossPay(emp, overtimeHours, lateHours, lateMinutes, absences, undertime);
+            double[] deductions = PayrollCalculator.calculateDeductions(grossPay, bracket);
+            double totalDeductions = deductions[0] + deductions[1] + deductions[2] + deductions[3];
+            double netPay = grossPay - (houseLoan + carLoan);
 
-System.out.print("Employee Number :");
-EmpNum=in.nextInt();
-switch (EmpNum){
-case 1001 :
-    System.out.println("Last Name       :"+lname1);
-    System.out.println("First Name      :"+fname1);
-    System.out.println("Middle Name     :"+mname1);
-    System.out.println("Position        :"+position1);
-    System.out.println("Department      :"+department);
-    System.out.println("Status          :"+sstatus);
-    System.out.println("Monthly Salary  :P"+monthsal1);
-    System.out.println("Allowances      :P"+allo1);
-    System.out.print("Overtime        :");
-overhrs1=in.nextDouble();
-overtime1=overhrs1*hrspay;
-       System.out.println("OvertimePay	:P"+overtime1);
-totalincome1=monthsal1 + allo1 + overtime1;
-        System.out.println("TOTAL INCOME    :P"+totalincome1);
+            // Print full payroll slip
+            System.out.println("\n-------------- Payroll Slip --------------");
+            System.out.println("\nEmployee Number          : " + emp.getId());
+            System.out.println("Employee Name            : " + emp.getFullName());
+            System.out.println("Position                 : " + emp.getPosition());
+            System.out.println("Department               : " + emp.getDepartment());
+            System.out.println("Status                   : " + emp.getStatus());
+            System.out.println("Monthly Salary           : " + emp.getMonthlySalary());
+            System.out.println("Allowance                : " + emp.getAllowance());
+            System.out.println("Overtime Pay             : " + overtimePay);
+            System.out.println("\nComputation of Time");
+            System.out.println("    Late                 : " + lateHours + " hr, " + lateMinutes + " min");
+            System.out.println("    Absences             : " + absences + " days");
+            System.out.println("    Undertime            : " + undertime + " hr");
+            System.out.println("    Total Hours          : " + (192 - absences*8 - undertime - lateHours));
+            System.out.println("    Rate                 : " + emp.getHourlyRate());
+            System.out.println("    Total Income         : " + grossPay);
+            System.out.println("\nComputation of Deduction");
+            System.out.println("    Tax                  : " + deductions[0]);
+            System.out.println("    SSS                  : " + deductions[1]);
+            System.out.println("    Pag-IBIG             : " + deductions[2]);
+            System.out.println("    PhilHealth           : " + deductions[3]);
+            System.out.println("    Total Deduction      : " + totalDeductions);
+            System.out.println("  Others");
+            System.out.println("    House Loan           : " + houseLoan);
+            System.out.println("    Car Loan             : " + carLoan);
+            System.out.println("    Total Loan           : " + totalLoan);
+            System.out.println("\nTotal Gross Pay          : " + grossPay);
+            System.out.println("Total Net Pay            : " + netPay);
+            System.out.println("\n------------------------------------------");
 
-System.out.println("\n------------------------------------------------------");
-System.out.println("                 D E D U C T I O N S                   ");
-System.out.println("------------------------------------------------------");
-        System.out.println("Number of Works  :"+numworks);
-	System.out.print("Late(Hour)       :");
-hour=in.nextDouble();
-totalhrs=hour*hourded;
-	System.out.print("Late(Minutes)    :");
-minute=in.nextDouble();
-if(minute>=1 && minute<=55) {
-	minute=minuteded;
-}
-else if(minute==0){
-	minute=minut;
-}
-late=minute+totalhrs;
-	System.out.print("Absences         :");
-abse=in.nextDouble();
-absetot=absehrs*abse;
-	System.out.print("Undertime        :");
-undertime=in.nextInt();
-undertot=undertime*underhrs;
-tothrs=numworks-undertot-absetot-hour;
-	System.out.println("Total Hours      :"+tothrs);
-	System.out.println("Rate             :P"+rate1);
-	totincome=tothrs*rate1+allo1+overtime1-late;
-	System.out.println("Total Income     :P"+totincome);
+            System.out.println("\nDo you want to repeat again? [Y/N]: ");
+            ans = sc.nextLine().charAt(0);
+        
+        } while (ans == 'Y' || ans == 'y');
 
-System.out.print("\nSpecify Tax Bracket\n");
-System.out.print("[1]Single\n[2]Married\n[3]Widow");
-
-System.out.print("\nEnter Bracket   :");
-
-sel=in.nextInt();
-if(sel==1)
-{
-tax= totincome*.20;
-SSS= totincome*0.07;
-PGBG= totincome*0.01;
-PH= totincome*0.01;
-deductions= tax + SSS + PGBG + PH;
-
-System.out.println("TAX             :P"+tax);
-System.out.println("SSS             :P"+SSS);
-System.out.println("Pag-IBIG        :P"+PGBG);
-System.out.println("PhilHealth      :P"+PH);
-System.out.println("\nDeductions      :P"+deductions);
-}
-
-else if(sel==2)
-{
-tax= totincome*.10;
-SSS= totincome*0.03;
-PGBG= totincome*0.01;
-PH= totincome*0.01;
-deductions= tax + SSS + PGBG + PH;
-
-System.out.println("TAX             :P"+tax);
-System.out.println("SSS             :P"+SSS);
-System.out.println("Pag-IBIG        :P"+PGBG);
-System.out.println("PhilHealth      :P"+PH);
-System.out.println("\nDeductions      :P"+deductions);
-}
-else
-{
-tax= totincome*.08;
-SSS= totincome*.02;
-PGBG= totincome*.01;
-PH= totincome*0.01;
-deductions= tax + SSS + PGBG + PH;
-
-System.out.println("TAX             :P"+tax);
-System.out.println("SSS             :P"+SSS);
-System.out.println("Pag-IBIG        :P"+PGBG);
-System.out.println("PhilHealth      :P"+PH);
-System.out.println("\nDeductions      :P"+deductions);
-}
-
-System.out.println("\n------------------------------------------------------");
-System.out.println("                    PAYROLL SLIP                      ");
-System.out.println("------------------------------------------------------");
-System.out.println("Employee Number :"+id1);
-System.out.println("Last Name       :"+lname1);
-System.out.println("First Name      :"+fname1);
-System.out.println("Middle Name     :"+mname1);
-System.out.println("Position        :"+position1);
-System.out.println("Department      :"+department);
-System.out.println("Status          :"+sstatus);
-System.out.print("\n    Monthly Salary  :P"+monthsal1);
-System.out.print("\n    Allowances      :P"+allo1);
-System.out.print("\n    Overtime        :P"+overtime1);
-System.out.print("\n    Total Income    :P"+totincome);
-
-System.out.print("\n\n    TAX             :P"+tax);
-System.out.print("\n    SSS             :P"+SSS);
-System.out.print("\n    Pag-IBIG        :P"+PGBG);
-System.out.print("\n    PhilHealth      :P"+PH);
-System.out.print("\n    Total Deduction :P"+deductions);
-
-System.out.println("\n\n    Others");
-System.out.print("    House Loan      :P");
-houseloan=in.nextDouble();
-System.out.print("    Car Loan        :P");
-carloan=in.nextDouble();
-totalloan=houseloan+carloan;
-System.out.print("    Total Loan      :P"+totalloan);
-grosspay= totincome - deductions;
-System.out.print("\n\n TOTAL GROSS PAY    :P"+grosspay);
-netpay=grosspay-totalloan;
-System.out.print("\n TOTAL NET PAY      :P"+netpay);
-break;
-
-case 1002 :
-    System.out.println("Last Name       :"+lname2);
-    System.out.println("First Name      :"+fname2);
-    System.out.println("Middle Name     :"+mname2);
-    System.out.println("Position        :"+position2);
-    System.out.println("Department      :"+department);
-    System.out.println("Status          :"+sstatus);
-    System.out.println("Monthly Salary  :P"+monthsal2);
-    System.out.println("Allowances      :P"+allo2);
-    System.out.print("Overtime        :");
-overhrs2=in.nextDouble();
-overtime2=overhrs2*hrspay;
-       System.out.println("OvertimePay	:P"+overtime2);
-totalincome2=monthsal2 + allo2 + overtime2;
-        System.out.println("TOTAL INCOME    :P"+totalincome2);
-
-System.out.println("\n------------------------------------------------------");
-System.out.println("                 D E D U C T I O N S                   ");
-System.out.println("------------------------------------------------------");
-        System.out.println("Number of Works  :"+numworks);
-	System.out.print("Late(Hour)       :");
-hour=in.nextDouble();
-totalhrs=hour*hourded;
-	System.out.print("Late(Minutes)    :");
-minute=in.nextDouble();
-if(minute>=1 && minute<=55) {
-	minute=minuteded;
-}
-else if(minute==0){
-	minute=minut;
-}
-late=minute+totalhrs;
-	System.out.print("Absences         :");
-abse=in.nextDouble();
-absetot=absehrs*abse;
-	System.out.print("Undertime        :");
-undertime=in.nextInt();
-undertot=undertime*underhrs;
-tothrs=numworks-undertot-absetot-hour;
-	System.out.println("Total Hours      :"+tothrs);
-	System.out.println("Rate             :P"+rate2);
-	totincome=tothrs*rate2+allo2+overtime2-late;
-	System.out.println("Total Income     :P"+totincome);
-
-System.out.print("\nSpecify Tax Bracket\n");
-System.out.print("[1]Single\n[2]Married\n[3]Widow");
-
-System.out.print("\nEnter Bracket   :");
-
-sel=in.nextInt();
-if(sel==1)
-{
-tax= totincome*.20;
-SSS= totincome*0.07;
-PGBG= totincome*0.01;
-PH= totincome*0.01;
-deductions= tax + SSS + PGBG + PH;
-
-System.out.println("TAX             :P"+tax);
-System.out.println("SSS             :P"+SSS);
-System.out.println("Pag-IBIG        :P"+PGBG);
-System.out.println("PhilHealth      :P"+PH);
-System.out.println("\nDeductions      :P"+deductions);
-}
-
-else if(sel==2)
-{
-tax= totincome*.10;
-SSS= totincome*0.03;
-PGBG= totincome*0.01;
-PH= totincome*0.01;
-deductions= tax + SSS + PGBG + PH;
-
-System.out.println("TAX             :P"+tax);
-System.out.println("SSS             :P"+SSS);
-System.out.println("Pag-IBIG        :P"+PGBG);
-System.out.println("PhilHealth      :P"+PH);
-System.out.println("\nDeductions      :P"+deductions);
-}
-else
-{
-tax= totincome*.08;
-SSS= totincome*.02;
-PGBG= totincome*.01;
-PH= totincome*0.01;
-deductions= tax + SSS + PGBG + PH;
-
-System.out.println("TAX             :P"+tax);
-System.out.println("SSS             :P"+SSS);
-System.out.println("Pag-IBIG        :P"+PGBG);
-System.out.println("PhilHealth      :P"+PH);
-System.out.println("\nDeductions      :P"+deductions);
-}
-
-System.out.println("\n------------------------------------------------------");
-System.out.println("                    PAYROLL SLIP                      ");
-System.out.println("------------------------------------------------------");
-System.out.println("Employee Number :"+id2);
-System.out.println("Last Name       :"+lname2);
-System.out.println("First Name      :"+fname2);
-System.out.println("Middle Name     :"+mname2);
-System.out.println("Position        :"+position2);
-System.out.println("Department      :"+department);
-System.out.println("Status          :"+sstatus);
-System.out.print("\n    Monthly Salary  :P"+monthsal2);
-System.out.print("\n    Allowances      :P"+allo2);
-System.out.print("\n    Overtime        :P"+overtime2);
-System.out.print("\n    Total Income    :P"+totincome);
-
-System.out.print("\n\n    TAX             :P"+tax);
-System.out.print("\n    SSS             :P"+SSS);
-System.out.print("\n    Pag-IBIG        :P"+PGBG);
-System.out.print("\n    PhilHealth      :P"+PH);
-System.out.print("\n    Total Deduction :P"+deductions);
-
-System.out.println("\n\n    Others");
-System.out.print("    House Loan      :P");
-houseloan=in.nextDouble();
-System.out.print("    Car Loan        :P");
-carloan=in.nextDouble();
-totalloan=houseloan+carloan;
-System.out.print("    Total Loan      :P"+totalloan);
-grosspay= totincome - deductions;
-System.out.print("\n\n TOTAL GROSS PAY    :P"+grosspay);
-netpay=grosspay-totalloan;
-System.out.print("\n TOTAL NET PAY      :P"+netpay);
-break;
-
-case 1003 :
-    System.out.println("Last Name       :"+lname3);
-    System.out.println("First Name      :"+fname3);
-    System.out.println("Middle Name     :"+mname3);
-    System.out.println("Position        :"+position3);
-    System.out.println("Department      :"+department);
-    System.out.println("Status          :"+wstatus);
-    System.out.println("Monthly Salary  :P"+monthsal3);
-    System.out.println("Allowances      :P"+allo3);
-    System.out.print("Overtime        :");
-overhrs3=in.nextDouble();
-overtime3=overhrs3*hrspay;
-       System.out.println("OvertimePay	:P"+overtime3);
-totalincome3=monthsal3 + allo3 + overtime3;
-        System.out.println("TOTAL INCOME    :P"+totalincome3);
-
-System.out.println("\n------------------------------------------------------");
-System.out.println("                 D E D U C T I O N S                   ");
-System.out.println("------------------------------------------------------");
-        System.out.println("Number of Works  :"+numworks);
-	System.out.print("Late(Hour)       :");
-hour=in.nextDouble();
-totalhrs=hour*hourded;
-	System.out.print("Late(Minutes)    :");
-minute=in.nextDouble();
-if(minute>=1 && minute<=55) {
-	minute=minuteded;
-}
-else if(minute==0){
-	minute=minut;
-}
-late=minute+totalhrs;
-	System.out.print("Absences         :");
-abse=in.nextDouble();
-absetot=absehrs*abse;
-	System.out.print("Undertime        :");
-undertime=in.nextInt();
-undertot=undertime*underhrs;
-tothrs=numworks-undertot-absetot-hour;
-	System.out.println("Total Hours      :"+tothrs);
-	System.out.println("Rate             :P"+rate3);
-	totincome=tothrs*rate3+allo3+overtime3-late;
-	System.out.println("Total Income     :P"+totincome);
-
-System.out.print("\nSpecify Tax Bracket\n");
-System.out.print("[1]Single\n[2]Married\n[3]Widow");
-
-System.out.print("\nEnter Bracket   :");
-
-sel=in.nextInt();
-if(sel==1)
-{
-tax= totincome*.20;
-SSS= totincome*0.07;
-PGBG= totincome*0.01;
-PH= totincome*0.01;
-deductions= tax + SSS + PGBG + PH;
-
-System.out.println("TAX             :P"+tax);
-System.out.println("SSS             :P"+SSS);
-System.out.println("Pag-IBIG        :P"+PGBG);
-System.out.println("PhilHealth      :P"+PH);
-System.out.println("\nDeductions      :P"+deductions);
-}
-
-else if(sel==2)
-{
-tax= totincome*.10;
-SSS= totincome*0.03;
-PGBG= totincome*0.01;
-PH= totincome*0.01;
-deductions= tax + SSS + PGBG + PH;
-
-System.out.println("TAX             :P"+tax);
-System.out.println("SSS             :P"+SSS);
-System.out.println("Pag-IBIG        :P"+PGBG);
-System.out.println("PhilHealth      :P"+PH);
-System.out.println("\nDeductions      :P"+deductions);
-}
-else
-{
-tax= totincome*.08;
-SSS= totincome*.02;
-PGBG= totincome*.01;
-PH= totincome*0.01;
-deductions= tax + SSS + PGBG + PH;
-
-System.out.println("TAX             :P"+tax);
-System.out.println("SSS             :P"+SSS);
-System.out.println("Pag-IBIG        :P"+PGBG);
-System.out.println("PhilHealth      :P"+PH);
-System.out.println("\nDeductions      :P"+deductions);
-}
-
-System.out.println("\n------------------------------------------------------");
-System.out.println("                    PAYROLL SLIP                      ");
-System.out.println("------------------------------------------------------");
-System.out.println("Employee Number :"+id3);
-System.out.println("Last Name       :"+lname3);
-System.out.println("First Name      :"+fname3);
-System.out.println("Middle Name     :"+mname3);
-System.out.println("Position        :"+position3);
-System.out.println("Department      :"+department);
-System.out.println("Status          :"+wstatus);
-System.out.print("\n    Monthly Salary  :P"+monthsal3);
-System.out.print("\n    Allowances      :P"+allo3);
-System.out.print("\n    Overtime        :P"+overtime3);
-System.out.print("\n    Total Income    :P"+totincome);
-
-System.out.print("\n\n    TAX             :P"+tax);
-System.out.print("\n    SSS             :P"+SSS);
-System.out.print("\n    Pag-IBIG        :P"+PGBG);
-System.out.print("\n    PhilHealth      :P"+PH);
-System.out.print("\n    Total Deduction :P"+deductions);
-
-System.out.println("\n\n    Others");
-System.out.print("    House Loan      :P");
-houseloan=in.nextDouble();
-System.out.print("    Car Loan        :P");
-carloan=in.nextDouble();
-totalloan=houseloan+carloan;
-System.out.print("    Total Loan      :P"+totalloan);
-grosspay= totincome - deductions;
-System.out.print("\n\n TOTAL GROSS PAY    :P"+grosspay);
-netpay=grosspay-totalloan;
-System.out.print("\n TOTAL NET PAY      :P"+netpay);
-break;
-
-case 1004 :
-    System.out.println("Last Name       :"+lname4);
-    System.out.println("First Name      :"+fname4);
-    System.out.println("Middle Name     :"+mname4);
-    System.out.println("Position        :"+position4);
-    System.out.println("Department      :"+department);
-    System.out.println("Status          :"+wstatus);
-    System.out.println("Monthly Salary  :P"+monthsal4);
-    System.out.println("Allowances      :P"+allo4);
-    System.out.print("Overtime        :");
-overhrs4=in.nextDouble();
-overtime4=overhrs4*hrspay;
-       System.out.println("OvertimePay	:P"+overtime4);
-totalincome4=monthsal4 + allo4 + overtime4;
-        System.out.println("TOTAL INCOME    :P"+totalincome4);
-
-System.out.println("\n------------------------------------------------------");
-System.out.println("                 D E D U C T I O N S                   ");
-System.out.println("------------------------------------------------------");
-        System.out.println("Number of Works  :"+numworks);
-	System.out.print("Late(Hour)       :");
-hour=in.nextDouble();
-totalhrs=hour*hourded;
-	System.out.print("Late(Minutes)    :");
-minute=in.nextDouble();
-if(minute>=1 && minute<=55) {
-	minute=minuteded;
-}
-else if(minute==0){
-	minute=minut;
-}
-late=minute+totalhrs;
-	System.out.print("Absences         :");
-abse=in.nextDouble();
-absetot=absehrs*abse;
-	System.out.print("Undertime        :");
-undertime=in.nextInt();
-undertot=undertime*underhrs;
-tothrs=numworks-undertot-absetot-hour;
-	System.out.println("Total Hours      :"+tothrs);
-	System.out.println("Rate             :P"+rate4);
-	totincome=tothrs*rate4+allo4+overtime4-late;
-	System.out.println("Total Income     :P"+totincome);
-
-System.out.print("\nSpecify Tax Bracket\n");
-System.out.print("[1]Single\n[2]Married\n[3]Widow");
-
-System.out.print("\nEnter Bracket   :");
-
-sel=in.nextInt();
-if(sel==1)
-{
-tax= totincome*.20;
-SSS= totincome*0.07;
-PGBG= totincome*0.01;
-PH= totincome*0.01;
-deductions= tax + SSS + PGBG + PH;
-
-System.out.println("TAX             :P"+tax);
-System.out.println("SSS             :P"+SSS);
-System.out.println("Pag-IBIG        :P"+PGBG);
-System.out.println("PhilHealth      :P"+PH);
-System.out.println("\nDeductions      :P"+deductions);
-}
-
-else if(sel==2)
-{
-tax= totincome*.10;
-SSS= totincome*0.03;
-PGBG= totincome*0.01;
-PH= totincome*0.01;
-deductions= tax + SSS + PGBG + PH;
-
-System.out.println("TAX             :P"+tax);
-System.out.println("SSS             :P"+SSS);
-System.out.println("Pag-IBIG        :P"+PGBG);
-System.out.println("PhilHealth      :P"+PH);
-System.out.println("\nDeductions      :P"+deductions);
-}
-else
-{
-tax= totincome*.08;
-SSS= totincome*.02;
-PGBG= totincome*.01;
-PH= totincome*0.01;
-deductions= tax + SSS + PGBG + PH;
-
-System.out.println("TAX             :P"+tax);
-System.out.println("SSS             :P"+SSS);
-System.out.println("Pag-IBIG        :P"+PGBG);
-System.out.println("PhilHealth      :P"+PH);
-System.out.println("\nDeductions      :P"+deductions);
-}
-
-System.out.println("\n------------------------------------------------------");
-System.out.println("                    PAYROLL SLIP                      ");
-System.out.println("------------------------------------------------------");
-System.out.println("Employee Number :"+id4);
-System.out.println("Last Name       :"+lname4);
-System.out.println("First Name      :"+fname4);
-System.out.println("Middle Name     :"+mname4);
-System.out.println("Position        :"+position4);
-System.out.println("Department      :"+department);
-System.out.println("Status          :"+wstatus);
-System.out.print("\n    Monthly Salary  :P"+monthsal4);
-System.out.print("\n    Allowances      :P"+allo4);
-System.out.print("\n    Overtime        :P"+overtime4);
-System.out.print("\n    Total Income    :P"+totincome);
-
-System.out.print("\n\n    TAX             :P"+tax);
-System.out.print("\n    SSS             :P"+SSS);
-System.out.print("\n    Pag-IBIG        :P"+PGBG);
-System.out.print("\n    PhilHealth      :P"+PH);
-System.out.print("\n    Total Deduction :P"+deductions);
-
-System.out.println("\n\n    Others");
-System.out.print("    House Loan      :P");
-houseloan=in.nextDouble();
-System.out.print("    Car Loan        :P");
-carloan=in.nextDouble();
-totalloan=houseloan+carloan;
-System.out.print("    Total Loan      :P"+totalloan);
-grosspay= totincome - deductions;
-System.out.print("\n\n TOTAL GROSS PAY    :P"+grosspay);
-netpay=grosspay-totalloan;
-System.out.print("\n TOTAL NET PAY      :P"+netpay);
-break;
-
-default:
-System.out.println("Invalid Number");
-break; 
-
-}
-    System.out.println("\n\nDo you want to select again? [Y/N]");
-    ans=(char)System.in.read();
-    System.in.read();
-    }while(ans== 'Y' || ans == 'y');
-}
+        sc.close();
+    }
 }
