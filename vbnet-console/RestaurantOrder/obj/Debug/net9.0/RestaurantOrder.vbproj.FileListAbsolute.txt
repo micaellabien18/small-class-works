@@ -1,0 +1,15 @@
+D:\Dev\Projects\small-class-works\vbnet-console\RestaurantOrder\bin\Debug\net9.0\RestaurantOrder.exe
+D:\Dev\Projects\small-class-works\vbnet-console\RestaurantOrder\bin\Debug\net9.0\RestaurantOrder.deps.json
+D:\Dev\Projects\small-class-works\vbnet-console\RestaurantOrder\bin\Debug\net9.0\RestaurantOrder.runtimeconfig.json
+D:\Dev\Projects\small-class-works\vbnet-console\RestaurantOrder\bin\Debug\net9.0\RestaurantOrder.dll
+D:\Dev\Projects\small-class-works\vbnet-console\RestaurantOrder\bin\Debug\net9.0\RestaurantOrder.pdb
+D:\Dev\Projects\small-class-works\vbnet-console\RestaurantOrder\obj\Debug\net9.0\RestaurantOrder.GeneratedMSBuildEditorConfig.editorconfig
+D:\Dev\Projects\small-class-works\vbnet-console\RestaurantOrder\obj\Debug\net9.0\RestaurantOrder.AssemblyInfoInputs.cache
+D:\Dev\Projects\small-class-works\vbnet-console\RestaurantOrder\obj\Debug\net9.0\RestaurantOrder.AssemblyInfo.vb
+D:\Dev\Projects\small-class-works\vbnet-console\RestaurantOrder\obj\Debug\net9.0\RestaurantOrder.vbproj.CoreCompileInputs.cache
+D:\Dev\Projects\small-class-works\vbnet-console\RestaurantOrder\obj\Debug\net9.0\RestaurantOrder.sourcelink.json
+D:\Dev\Projects\small-class-works\vbnet-console\RestaurantOrder\obj\Debug\net9.0\RestaurantOrder.dll
+D:\Dev\Projects\small-class-works\vbnet-console\RestaurantOrder\obj\Debug\net9.0\refint\RestaurantOrder.dll
+D:\Dev\Projects\small-class-works\vbnet-console\RestaurantOrder\obj\Debug\net9.0\RestaurantOrder.pdb
+D:\Dev\Projects\small-class-works\vbnet-console\RestaurantOrder\obj\Debug\net9.0\RestaurantOrder.genruntimeconfig.cache
+D:\Dev\Projects\small-class-works\vbnet-console\RestaurantOrder\obj\Debug\net9.0\ref\RestaurantOrder.dll

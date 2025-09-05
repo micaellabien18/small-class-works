@@ -1,0 +1,15 @@
+D:\Dev\Projects\small-class-works\vbnet-console\DisplayName\bin\Debug\net9.0\DisplayName.exe
+D:\Dev\Projects\small-class-works\vbnet-console\DisplayName\bin\Debug\net9.0\DisplayName.deps.json
+D:\Dev\Projects\small-class-works\vbnet-console\DisplayName\bin\Debug\net9.0\DisplayName.runtimeconfig.json
+D:\Dev\Projects\small-class-works\vbnet-console\DisplayName\bin\Debug\net9.0\DisplayName.dll
+D:\Dev\Projects\small-class-works\vbnet-console\DisplayName\bin\Debug\net9.0\DisplayName.pdb
+D:\Dev\Projects\small-class-works\vbnet-console\DisplayName\obj\Debug\net9.0\DisplayName.GeneratedMSBuildEditorConfig.editorconfig
+D:\Dev\Projects\small-class-works\vbnet-console\DisplayName\obj\Debug\net9.0\DisplayName.AssemblyInfoInputs.cache
+D:\Dev\Projects\small-class-works\vbnet-console\DisplayName\obj\Debug\net9.0\DisplayName.AssemblyInfo.vb
+D:\Dev\Projects\small-class-works\vbnet-console\DisplayName\obj\Debug\net9.0\DisplayName.vbproj.CoreCompileInputs.cache
+D:\Dev\Projects\small-class-works\vbnet-console\DisplayName\obj\Debug\net9.0\DisplayName.sourcelink.json
+D:\Dev\Projects\small-class-works\vbnet-console\DisplayName\obj\Debug\net9.0\DisplayName.dll
+D:\Dev\Projects\small-class-works\vbnet-console\DisplayName\obj\Debug\net9.0\refint\DisplayName.dll
+D:\Dev\Projects\small-class-works\vbnet-console\DisplayName\obj\Debug\net9.0\DisplayName.pdb
+D:\Dev\Projects\small-class-works\vbnet-console\DisplayName\obj\Debug\net9.0\DisplayName.genruntimeconfig.cache
+D:\Dev\Projects\small-class-works\vbnet-console\DisplayName\obj\Debug\net9.0\ref\DisplayName.dll

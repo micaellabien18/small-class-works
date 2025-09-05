@@ -1,0 +1,15 @@
+D:\Dev\Projects\small-class-works\vbnet-console\GradesArray\bin\Debug\net9.0\GradesArray.exe
+D:\Dev\Projects\small-class-works\vbnet-console\GradesArray\bin\Debug\net9.0\GradesArray.deps.json
+D:\Dev\Projects\small-class-works\vbnet-console\GradesArray\bin\Debug\net9.0\GradesArray.runtimeconfig.json
+D:\Dev\Projects\small-class-works\vbnet-console\GradesArray\bin\Debug\net9.0\GradesArray.dll
+D:\Dev\Projects\small-class-works\vbnet-console\GradesArray\bin\Debug\net9.0\GradesArray.pdb
+D:\Dev\Projects\small-class-works\vbnet-console\GradesArray\obj\Debug\net9.0\GradesArray.GeneratedMSBuildEditorConfig.editorconfig
+D:\Dev\Projects\small-class-works\vbnet-console\GradesArray\obj\Debug\net9.0\GradesArray.AssemblyInfoInputs.cache
+D:\Dev\Projects\small-class-works\vbnet-console\GradesArray\obj\Debug\net9.0\GradesArray.AssemblyInfo.vb
+D:\Dev\Projects\small-class-works\vbnet-console\GradesArray\obj\Debug\net9.0\GradesArray.vbproj.CoreCompileInputs.cache
+D:\Dev\Projects\small-class-works\vbnet-console\GradesArray\obj\Debug\net9.0\GradesArray.sourcelink.json
+D:\Dev\Projects\small-class-works\vbnet-console\GradesArray\obj\Debug\net9.0\GradesArray.dll
+D:\Dev\Projects\small-class-works\vbnet-console\GradesArray\obj\Debug\net9.0\refint\GradesArray.dll
+D:\Dev\Projects\small-class-works\vbnet-console\GradesArray\obj\Debug\net9.0\GradesArray.pdb
+D:\Dev\Projects\small-class-works\vbnet-console\GradesArray\obj\Debug\net9.0\GradesArray.genruntimeconfig.cache
+D:\Dev\Projects\small-class-works\vbnet-console\GradesArray\obj\Debug\net9.0\ref\GradesArray.dll
